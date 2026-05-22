@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Милана, встречай меня?</title>
+  <!-- Шрифты и стили -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(145deg, #fdeff2 0%, #ffe6eb 100%);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* плавающие сердечки */
+    .floating-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      color: rgba(255, 120, 160, 0.25);
+      font-size: 1.5rem;
+      user-select: none;
+      animation: floatHeart 12s infinite linear;
+      bottom: -50px;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    /* основной контейнер */
+    .card {
+      position: relative;
+      z-index: 10;
+      max-width: 650px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-radius: 64px 48px 64px 48px;
+      box-shadow: 0 30px 50px rgba(231, 100, 140, 0.2), 0 8px 20px rgba(0,0,0,0.05);
+      padding: 2rem 2rem 3rem;
+      text-align: center;
+      transition: all 0.4s ease;
+      border: 1px solid rgba(255, 235, 240, 0.9);
+    }
+
+    /* декоративные элементы */
+    .corner-deco {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* фото / аватар placeholder — стилизованное сердечко */
+    .avatar {
+      width: 130px;
+      height: 130px;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4.2rem;
+      color: white;
+      box-shadow: 0 20px 30px -10px rgba(255, 80, 120, 0.4);
+      transition: transform 0.3s ease;
+      animation: softGlow 3s infinite alternate;
+    }
+
+    @keyframes softGlow {
+      0% {
+        box-shadow: 0 10px 25px rgba(255, 105, 130, 0.3);
+        transform: scale(1);
+      }
+      100% {
+        box-shadow: 0 20px 35px rgba(255, 90, 120, 0.6);
+        transform: scale(1.02);
+      }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      background: linear-gradient(120deg, #c43a6b, #ff7a9e);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.3px;
+    }
+
+    .sub {
+      font-size: 1rem;
+      color: #b35d7a;
+      background: #fff0f3;
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      border-radius: 40px;
+      font-weight: 500;
+      backdrop-filter: blur(4px);
+      margin-bottom: 1.8rem;
+    }
+
+    .question {
+      font-size: 1.55rem;
+      font-weight: 500;
+      color: #3a2c31;
+      margin: 1.8rem 0 1rem;
+      line-height: 1.3;
+    }
+
+    .question strong {
+      background: linear-gradient(145deg, #fc5c7d, #ff8a9f);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      font-weight: 700;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 2rem 0 1rem;
+    }
+
+    .btn {
+      border: none;
+      padding: 0.9rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 60px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: 'Inter', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    }
+
+    .btn-yes {
+      background: linear-gradient(95deg, #ff6680, #ff8aa8);
+      color: white;
+      border: none;
+      box-shadow: 0 8px 18px rgba(255, 80, 120, 0.3);
+    }
+
+    .btn-yes:hover {
+      transform: scale(1.03);
+      background: linear-gradient(95deg, #ff5773, #ff7b9c);
+      box-shadow: 0 12px 22px rgba(255, 80, 120, 0.4);
+    }
+
+    .btn-no {
+      background: #f1e2e6;
+      color: #a75c74;
+      border: 1px solid #ffcfdd;
+    }
+
+    .btn-no:hover {
+      background: #ffe7ed;
+      transform: scale(0.98);
+    }
+
+    /* секция ответа */
+    .response-area {
+      margin-top: 2rem;
+      padding: 1rem 1rem;
+      border-radius: 3rem;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      min-height: 110px;
+    }
+
+    .message-box {
+      background: rgba(255, 250, 245, 0.9);
+      border-radius: 40px;
+      padding: 1.2rem 1rem;
+      backdrop-filter: blur(4px);
+      font-size: 1rem;
+      font-weight: 500;
+      color: #b6456a;
+      border: 1px solid rgba(255, 200, 210, 0.8);
+      animation: fadeSlideUp 0.5s ease;
+    }
+
+    .message-box i {
+      margin-right: 0.5rem;
+      color: #fc6185;
+    }
+
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .floating-confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ff7b8f;
+      opacity: 0.7;
+      animation: fallConfetti 1.5s ease-out forwards;
+    }
+
+    @keyframes fallConfetti {
+      0% {
+        transform: translateY(-20px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(300deg);
+        opacity: 0;
+      }
+    }
+
+    /* для красивой тишины после да */
+    .heart-burst {
+      position: fixed;
+      font-size: 2rem;
+      pointer-events: none;
+      z-index: 1000;
+      animation: burstHeart 0.8s forwards;
+    }
+
+    @keyframes burstHeart {
+      0% {
+        transform: scale(0.2);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.5);
+        opacity: 0;
+      }
+    }
+
+    footer {
+      margin-top: 2rem;
+      font-size: 0.7rem;
+      color: #d49bb0;
+      letter-spacing: 0.3px;
+    }
+
+    @media (max-width: 550px) {
+      .card {
+        padding: 1.5rem 1.2rem 2rem;
+      }
+      h1 {
+        font-size: 1.9rem;
+      }
+      .question {
+        font-size: 1.3rem;
+      }
+      .btn {
+        padding: 0.7rem 1.4rem;
+        font-size: 1rem;
+      }
+      .avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="floating-hearts" id="heartsContainer"></div>
+
+<div class="card">
+  <div class="avatar">
+    <i class="fas fa-heart"></i>
+  </div>
+  <h1>Милана</h1>
+  <div class="sub">✨ для тебя ✨</div>
+  <div class="question">
+    Ты сделаешь меня самым счастливым?<br>
+    <strong>Будешь моей девушкой?</strong>
+  </div>
+  <div class="btn-group">
+    <button class="btn btn-yes" id="yesBtn"><i class="fas fa-check-circle"></i> Да, согласна!</button>
+    <button class="btn btn-no" id="noBtn"><i class="fas fa-heart-broken"></i> Пока не уверена</button>
+  </div>
+  <div class="response-area" id="responseArea">
+    <!-- сюда будет выводиться ответ или анимация -->
+    <div class="message-box" style="background: rgba(255,240,242,0.7);">
+      <i class="fas fa-heartbeat"></i> Нажми на сердечко или кнопку — и скажи мне "да" ❤️
+    </div>
+  </div>
+  <footer>
+    🌸 Только честно, Милана 🌸
+  </footer>
+</div>
+
+<script>
+  (function() {
+    // === конфиг имени ===
+    const MILANA_NAME = "Милана";
+
+    // Элементы DOM
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const responseArea = document.getElementById('responseArea');
+    
+    // Функция для создания плавающих сердечек (красивый фон)
+    function createFloatingHearts() {
+      const container = document.getElementById('heartsContainer');
+      if (!container) return;
+      const heartCount = 32;
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.innerHTML = '<i class="fas fa-heart"></i>';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.fontSize = (Math.random() * 1 + 0.7) + 'rem';
+        heart.style.animationDuration = 8 + Math.random() * 12 + 's';
+        heart.style.animationDelay = Math.random() * 10 + 's';
+        heart.style.opacity = 0.2 + Math.random() * 0.4;
+        heart.style.color = `rgba(255, ${100 + Math.floor(Math.random() * 100)}, 150, 0.35)`;
+        container.appendChild(heart);
+      }
+    }
+    createFloatingHearts();
+
+    // Функция для создания конфетти / летающих частиц
+    function createConfetti(originX, originY) {
+      const confettiContainer = document.createElement('div');
+      confettiContainer.classList.add('floating-confetti');
+      document.body.appendChild(confettiContainer);
+      const piecesCount = 70;
+      for (let i = 0; i < piecesCount; i++) {
+        const piece = document.createElement('div');
+        piece.classList.add('confetti-piece');
+        const size = 6 + Math.random() * 10;
+        piece.style.width = size + 'px';
+        piece.style.height = size + 'px';
+        piece.style.background = `hsl(${Math.random() * 30 + 340}, 80%, 65%)`;
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        piece.style.position = 'absolute';
+        piece.style.left = (originX + (Math.random() - 0.5) * 120) + 'px';
+        piece.style.top = (originY + (Math.random() - 0.5) * 80) + 'px';
+        const xMove = (Math.random() - 0.5) * 200;
+        const yMove = Math.random() * 400 + 100;
+        piece.style.setProperty('--x', xMove + 'px');
+        piece.style.animation = `fallConfetti 1.2s ease-out forwards`;
+        confettiContainer.appendChild(piece);
+        setTimeout(() => {
+          piece.remove();
+        }, 1300);
+      }
+      setTimeout(() => {
+        confettiContainer.remove();
+      }, 1500);
+    }
+
+    // эффект вылетающих сердечек при положительном ответе
+    function burstHeartsAround() {
+      for (let i = 0; i < 30; i++) {
+        const heartEl = document.createElement('div');
+        heartEl.classList.add('heart-burst');
+        heartEl.innerHTML = '<i class="fas fa-heart"></i>';
+        heartEl.style.left = Math.random() * window.innerWidth + 'px';
+        heartEl.style.top = Math.random() * window.innerHeight * 0.6 + 'px';
+        heartEl.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+        heartEl.style.color = `rgb(255, ${80 + Math.random() * 100}, 130)`;
+        heartEl.style.position = 'fixed';
+        document.body.appendChild(heartEl);
+        setTimeout(() => {
+          heartEl.remove();
+        }, 900);
+      }
+    }
+    
+    // функция для "ДА" (счастливый финал)
+    function showYesResponse() {
+      // очищаем область и показываем красивый ответ
+      responseArea.innerHTML = '';
+      const loveMessage = document.createElement('div');
+      loveMessage.classList.add('message-box');
+      loveMessage.style.backgroundColor = '#fff5f7';
+      loveMessage.style.border = '2px solid #ffb3c6';
+      loveMessage.style.boxShadow = '0 15px 25px rgba(255,80,100,0.2)';
+      loveMessage.innerHTML = `
+        <i class="fas fa-heart" style="color:#ff3366; animation: pulse 0.8s infinite;"></i>
+        <strong style="font-size:1.2rem;">Ты — моё счастье, Милана!</strong><br>
+        <span style="font-size:0.9rem;">❤️ Обещаю делать тебя счастливой каждый день ❤️</span>
+        <div style="margin-top:12px;"><i class="fas fa-kiss-wink-heart"></i> Ты согласилась! Ура!</div>
+      `;
+      responseArea.appendChild(loveMessage);
+      
+      // дополнительные анимации
+      burstHeartsAround();
+      
+      // получаем позицию кнопки да для эффекта конфетти
+      const rect = yesBtn.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      createConfetti(centerX, centerY);
+      
+      // также создаем второе облачко конфетти с разных сторон
+      setTimeout(() => {
+        const fakeEvent = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 };
+        createConfetti(window.innerWidth/2, window.innerHeight/2);
+      }, 200);
+      
+      // меняем фон кнопок? сделаем кнопку да неактивной? но пусть остаётся, но можно заблокировать повторные yes
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+      yesBtn.style.opacity = '0.7';
+      noBtn.style.opacity = '0.5';
+      yesBtn.style.cursor = 'default';
+      noBtn.style.cursor = 'default';
+      
+      // добавить особый заголовок 
+      const questionDiv = document.querySelector('.question');
+      if (questionDiv) {
+        questionDiv.innerHTML = `<strong>❤️ ${MILANA_NAME} сказала ДА! ❤️</strong><br><span style="font-size:1rem;">Я самый счастливый человек на свете!</span>`;
+      }
+    }
+    
+    // Эффект при нажатии "НЕТ" — не грустно, а мило и с намёком, что можно передумать и показать повторное предложение
+    let noClickCount = 0;
+    function showNoResponse() {
+      noClickCount++;
+      // плавно обновляем сообщение
+      responseArea.innerHTML = '';
+      const noMessage = document.createElement('div');
+      noMessage.classList.add('message-box');
+      
+      if (noClickCount === 1) {
+        noMessage.innerHTML = `<i class="fas fa-clock"></i> Милана, может быть, ты просто хочешь подумать? Я подожду 💕`;
+      } else if (noClickCount === 2) {
+        noMessage.innerHTML = `<i class="fas fa-smile-wink"></i> Ты такая милая, когда сомневаешься... но я знаю, что мы будем классной парой ✨`;
+      } else if (noClickCount === 3) {
+        noMessage.innerHTML = `<i class="fas fa-grin-hearts"></i> Милана, я не сдамся! Посмотри на эти кнопки — красная очень ждёт тебя 🥺👉👈`;
+        // маленькая хитрость: сделать кнопку "ДА" более заметной
+        yesBtn.style.transform = 'scale(1.05)';
+        setTimeout(() => { yesBtn.style.transform = ''; }, 500);
+      } else if (noClickCount >= 4) {
+        noMessage.innerHTML = `<i class="fas fa-heart"></i> Милана, знаешь.. Даже если ты сейчас жмёшь "нет", моё сердце всё равно хочет быть с тобой. Нажми "Да" 🌸`;
+        // добавим летающих сердечек немного, чтобы развеселить
+        burstHeartsAround();
+      }
+      responseArea.appendChild(noMessage);
+      
+      // небольшое движение кнопки нет
+      noBtn.style.transform = 'scale(0.96)';
+      setTimeout(() => { noBtn.style.transform = ''; }, 200);
+      
+      // после 3х "нет", если пользователь нажмет Да - всё равно обработаем. не блокируем да
+    }
+    
+    // Эффект наведения и клик по сердечку в аватаре -> тоже как предложение "да"
+    const avatarDiv = document.querySelector('.avatar');
+    if (avatarDiv) {
+      avatarDiv.addEventListener('click', () => {
+        if (yesBtn.disabled) return; // если уже ответила да
+        // имитируем согласие
+        showYesResponse();
+      });
+    }
+    
+    // Основные обработчики кнопок
+    yesBtn.addEventListener('click', () => {
+      if (yesBtn.disabled) return;
+      showYesResponse();
+    });
+    
+    noBtn.addEventListener('click', () => {
+      if (yesBtn.disabled) return;  // если уже да - ничего
+      showNoResponse();
+    });
+    
+    // Эффект появления при загрузке - плавное появление карточки
+    const card = document.querySelector('.card');
+    if (card) {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(25px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.7s ease, transform 0.5s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 100);
+    }
+    
+    // Добавим радужное изменение градиента при успешном согласии (эффект)
+    // А также дополнительно создаём плавающие подписи с именем
+    function addNameSparkle() {
+      const textSpans = document.querySelectorAll('h1, .sub, .question');
+      // просто для красоты, ничего лишнего
+    }
+    addNameSparkle();
+    
+    // Создаем движущиеся частицы рядом с мышкой? необязательно, но для изюминки: 
+    // при движении мышки появляются маленькие сердечки? можно легкое волшебство
+    let mouseMoveTimer = null;
+    document.body.addEventListener('mousemove', (e) => {
+      if (yesBtn.disabled) return; // после да не спамим сердечками
+      if (mouseMoveTimer) clearTimeout(mouseMoveTimer);
+      mouseMoveTimer = setTimeout(() => {
+        // иногда создаем одно плавающее сердечко рядом с курсором, но редко чтобы не перегружать
+        if (Math.random() < 0.12) {
+          const miniHeart = document.createElement('div');
+          miniHeart.style.position = 'fixed';
+          miniHeart.style.left = e.clientX - 10 + 'px';
+          miniHeart.style.top = e.clientY - 10 + 'px';
+          miniHeart.style.fontSize = '18px';
+          miniHeart.style.color = '#ff809f';
+          miniHeart.style.opacity = '0.8';
+          miniHeart.style.pointerEvents = 'none';
+          miniHeart.style.zIndex = '9999';
+          miniHeart.innerHTML = '❤️';
+          miniHeart.style.transition = 'transform 0.5s ease, opacity 0.8s';
+          document.body.appendChild(miniHeart);
+          setTimeout(() => {
+            miniHeart.style.transform = 'translateY(-30px) scale(0.5)';
+            miniHeart.style.opacity = '0';
+            setTimeout(() => miniHeart.remove(), 500);
+          }, 30);
+        }
+      }, 30);
+    });
+    
+    // не забываем подчеркнуть что имя Милана везде фигурирует
+    const titleElement = document.querySelector('title');
+    if (titleElement) {
+      titleElement.innerText = '❤️ Милана, будь моей девушкой! ❤️';
+    } else {
+      const newTitle = document.createElement('title');
+      newTitle.innerText = 'Милана ❤️ Ответь мне';
+      document.head.appendChild(newTitle);
+    }
+    
+    // Дополнительная анимация при загрузке: конфетти для настроения, только если не нажали
+    setTimeout(() => {
+      if (!yesBtn.disabled) {
+        // лёгкий сюрприз - одно облачко мелких сердечек через 1.5 секунды
+        const fakeStart = { clientX: window.innerWidth/2, clientY: window.innerHeight/2 };
+        const gentleBurst = () => {
+          const containerBurst = document.createElement('div');
+          containerBurst.style.position = 'fixed';
+          containerBurst.style.pointerEvents = 'none';
+          document.body.appendChild(containerBurst);
+          for(let i=0;i<20;i++) {
+            const h = document.createElement('div');
+            h.innerText = '🌸';
+            h.style.position = 'absolute';
+            h.style.left = (window.innerWidth/2 + (Math.random() - 0.5)*200) + 'px';
+            h.style.top = (window.innerHeight/2 + (Math.random() - 0.5)*150) + 'px';
+            h.style.fontSize = '1.2rem';
+            h.style.opacity = '0.6';
+            h.style.animation = 'fallConfetti 1s forwards';
+            containerBurst.appendChild(h);
+            setTimeout(() => h.remove(), 1000);
+          }
+          setTimeout(() => containerBurst.remove(), 1100);
+        };
+        // gentleBurst();
+      }
+    }, 800);
+  })();
+</script>
+</body>
+</html>
